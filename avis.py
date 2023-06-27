@@ -28,7 +28,7 @@ replies = [
     "Qu'est-ce que ça change?",
     'Pas mon soucis.',
     "Demande à quelqu'un d'autre.",
-    "M'en bas les couilles frère",
+    "M'en bats les couilles frère",
     "Le Grand Flens possède la réponse",
     "Des frites avec de la mayo svp",
     "Même Stephen n'est pas aussi con que cette question",

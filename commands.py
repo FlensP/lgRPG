@@ -1,6 +1,6 @@
 import random
 from avis import avis
-
+from game import run
 import discord
 
 
@@ -15,12 +15,18 @@ def commands_list(client, tree):
     async def ping(interaction: discord.Interaction):
         await interaction.response.send_message(f"Pong! In {round(client.latency * 1000)}ms")
 
+    @tree.command(name="game", description="Test the ping of the bot")
+    async def game(interaction: discord.Interaction):
+        await run(interaction)
+
     # Make a cheh command
     @tree.command(name="cheh", description="Cheh somebody")
     async def cheh(interaction: discord.Interaction, user: discord.Member):
         # Check if the user to cheh is the bot or the user sending the command
         if user == client.user:
             await interaction.response.send_message("Vous ne pouvez pas me **Cheh** !")
+        elif user.id == 309331967382519819:
+            await interaction.response.send_message(f"Tu ne peux pas cheh dieu {interaction.user.mention}")
         elif user == interaction.user:
             await interaction.response.send_message("**FEUR**")
         else:

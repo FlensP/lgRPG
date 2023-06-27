@@ -1,3 +1,4 @@
+import datetime
 import inspect
 import os
 
@@ -8,7 +9,7 @@ from responses import responses
 
 
 # Create a class of the bot
-class ChouetteBot(discord.Client):
+class LGBot(discord.Client):
 
     # Initialization when class is called
     def __init__(self):
@@ -48,7 +49,7 @@ class ChouetteBot(discord.Client):
         if message.author.bot:
             return
 
-        # Stock the message's informations in variables
+        # Stock the message's information in variables
         username = str(message.author)
         user_msg = str(message.content)
         channel = message.channel
@@ -59,6 +60,10 @@ class ChouetteBot(discord.Client):
             await channel.send(response)
             print(f'{self.user} responded : "{response}" to {username}')
 
+    async def on_typing(self, channel, user, when: datetime.datetime):
+        if when.month == 4 and when.day == 1:
+            await channel.send(f"{user.mention} tape plus vite ton message")
+
 
 # Function to run the bot
 def run_bot():
@@ -68,8 +73,8 @@ def run_bot():
     with open(f"{module_dir}/token", "r") as file:
         token = file.read()
 
-    # Create an instance of the ChouetteBot class
-    client = ChouetteBot()
+    # Create an instance of the LGBot class
+    client = LGBot()
 
     # Run the client with the token
     client.run(token, reconnect=True)
