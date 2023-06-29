@@ -50,7 +50,7 @@ class SimpleView(discord.ui.View):
     async def send(self, interaction: discord.Interaction, button: discord.ui.Button):
         if len(joueurs) == len(roles_list):
             loups = await send_roles(interaction.user)
-            await create_foret(loups)
+            await create_foret(loups, interaction.user)
         else:
             await interaction.response.send_message("Il n'y a pas le même nombre de rôles et de joueurs")
 
@@ -76,7 +76,7 @@ async def edit_embed(interaction):
 async def send_roles(user):
     global joueurs, roles_list, roles_loup
     random.shuffle(joueurs)
-    loups = [user]
+    loups = []
     txt = "Compo de la partie :\n"
     for i in range(len(joueurs)):
         emb = discord.Embed(title="Votre rôle", colour=int(color[roles_list[i]], 16))
@@ -93,10 +93,11 @@ async def send_roles(user):
     return loups
 
 
-async def create_foret(loups):
+async def create_foret(loups, user):
     global guild
     cat = discord.utils.get(guild.categories, id=390962605306675204)
     chan = await guild.create_text_channel("🌲・forêt", category=cat)
+    await chan.set_permissions(user, read_messages=True, manage_permissions=True)
     await chan.set_permissions(guild.default_role, read_messages=False)
     for loup in loups:
         await chan.set_permissions(loup, read_messages=True)
@@ -118,7 +119,7 @@ async def run(ctx):
     if len(joueurs) == 0:
         await ctx.response.send_message("Vous devez avoir des joueurs pour jouer")
         return
-    ctx.response.send_message("Passons en mp")
+    await ctx.response.send_message("Passons en mp")
     view = SimpleView(timeout=120)
     emb = discord.Embed(title=f"Compo pour {len(joueurs)}", colour=0x9F1E1A)
     emb.set_footer(text="LG RPG by Flens_")
