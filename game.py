@@ -27,6 +27,7 @@ class SelectMenu(discord.ui.Select):
     async def callback(self, interaction: discord.Interaction):
         roles_list.extend(self.values)
         await edit_embed(interaction)
+        await interaction.response.defer()
 
 
 class SimpleView(discord.ui.View):
@@ -51,6 +52,7 @@ class SimpleView(discord.ui.View):
         if len(joueurs) == len(roles_list):
             loups = await send_roles(interaction.user)
             await create_foret(loups, interaction.user)
+            await interaction.response.defer()
         else:
             await interaction.response.send_message("Il n'y a pas le même nombre de rôles et de joueurs")
 
@@ -59,6 +61,7 @@ class SimpleView(discord.ui.View):
     async def cancel(self, interaction: discord.Interaction, button: discord.ui.Button):
         roles_list.clear()
         await edit_embed(interaction)
+        await interaction.response.defer()
 
 
 async def edit_embed(interaction):
@@ -104,7 +107,7 @@ async def create_foret(loups, user):
 
 
 async def run(ctx):
-    global message, joueurs, guild
+    global message, joueurs, guild, roles_list
     ids = [309331967382519819, 229282075918729216, 272123414527868928, 337996843277615107]
     if ctx.user.id not in ids:
         await ctx.response.send_message("Vous devez avoir les perms pour jouer")
@@ -114,6 +117,7 @@ async def run(ctx):
         return
     channel = ctx.user.voice.channel
     guild = channel.guild
+    roles_list = []
     joueurs = channel.members
     joueurs.remove(ctx.user)
     if len(joueurs) == 0:
