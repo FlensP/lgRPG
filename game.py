@@ -109,7 +109,7 @@ async def create_foret(loups, user):
 
 async def run(ctx, client):
     global message, joueurs, guild, roles_list
-    if ctx.user.id not in client.config['PERMS'].split():
+    if str(ctx.user.id) not in client.config['PERMS'].split():
         if not (ctx.user in autorisations and (autorisations[ctx.user] + timedelta(hours=1)) > datetime.now()):
             await ctx.response.send_message("Vous devez avoir les perms pour jouer, vous pouvez faire une demande "
                                             "avec la commande /autorisation")
