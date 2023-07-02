@@ -2,6 +2,7 @@ import random
 import game
 import discord
 import idea
+import autorisation
 from avis import avis
 
 
@@ -16,7 +17,11 @@ def commands_list(client, tree):
 
     @tree.command(name="game", description="Organise une partie de LG")
     async def game2(interaction: discord.Interaction):
-        await game.run(interaction)
+        await game.run(interaction, client)
+
+    @tree.command(name="autorisation", description="Donne ou demande l'autorisation pour faire une game")
+    async def auto(interaction: discord.Interaction, user: discord.Member):
+        await autorisation.run(interaction, client, user)
 
     @tree.command(name="cheh", description="Cheh somebody")
     async def cheh(interaction: discord.Interaction, user: discord.Member):

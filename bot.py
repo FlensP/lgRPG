@@ -1,8 +1,7 @@
 import datetime
-import inspect
-import os
 
 import discord
+from dotenv import dotenv_values
 
 import commands
 from responses import responses
@@ -18,6 +17,7 @@ class LGBot(discord.Client):
         super().__init__(intents=intents)
         self.synced = False
         self.added = False
+        self.config = dotenv_values()
 
     # Wait until bot is ready
     async def on_ready(self):
@@ -67,14 +67,8 @@ class LGBot(discord.Client):
 
 # Function to run the bot
 def run_bot():
-    # Import token from file
-    module_path = inspect.getfile(inspect.currentframe())
-    module_dir = os.path.realpath(os.path.dirname(module_path))
-    with open(f"{module_dir}/token", "r") as file:
-        token = file.read()
-
     # Create an instance of the LGBot class
     client = LGBot()
 
     # Run the client with the token
-    client.run(token, reconnect=True)
+    client.run(client.config['BOT_TOKEN'], reconnect=True)

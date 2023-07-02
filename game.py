@@ -1,6 +1,6 @@
 import json
 import random
-
+from datetime import datetime, timedelta
 import discord
 
 roles = ["loup garou", "voyante", "sorcière", "simple villageois", "cupidon", "chasseur", "voleur", "salvateur",
@@ -17,6 +17,7 @@ desc = json.load(open("ress/roles.json", encoding='utf-8'))
 color = json.load(open("ress/color.json", encoding='utf-8'))
 message = None
 guild = None
+autorisations = {}
 
 
 class SelectMenu(discord.ui.Select):
@@ -106,12 +107,13 @@ async def create_foret(loups, user):
         await chan.set_permissions(loup, read_messages=True)
 
 
-async def run(ctx):
+async def run(ctx, client):
     global message, joueurs, guild, roles_list
-    ids = [309331967382519819, 229282075918729216, 272123414527868928, 337996843277615107]
-    if ctx.user.id not in ids:
-        await ctx.response.send_message("Vous devez avoir les perms pour jouer")
-        return
+    if ctx.user.id not in client.config['PERMS'].split():
+        if not (ctx.user in autorisations and (autorisations[ctx.user] + timedelta(hours=1)) > datetime.now()):
+            await ctx.response.send_message("Vous devez avoir les perms pour jouer, vous pouvez faire une demande "
+                                            "avec la commande /autorisation")
+            return
     if ctx.user.voice is None:
         await ctx.response.send_message("Vous devez être en voc pour jouer")
         return
