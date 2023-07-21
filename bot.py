@@ -2,8 +2,10 @@ import datetime
 
 import discord
 from dotenv import dotenv_values
+from discord.ext import tasks
 
 import commands
+import routine
 from responses import responses
 
 
@@ -48,7 +50,6 @@ class LGBot(discord.Client):
         # If the message is from a bot, ignore
         if message.author.bot:
             return
-
         # Stock the message's information in variables
         username = str(message.author)
         user_msg = str(message.content)
@@ -63,6 +64,13 @@ class LGBot(discord.Client):
     async def on_typing(self, channel, user, when: datetime.datetime):
         if when.month == 4 and when.day == 1:
             await channel.send(f"{user.mention} tape plus vite ton message")
+
+    dix_heure = datetime.time(hour=12, minute=0, tzinfo=datetime.timezone.utc)
+
+    @tasks.loop(time=dix_heure)
+    async def my_task(self):
+        await routine.get_tournois(self)
+        print("update_done")
 
 
 # Function to run the bot

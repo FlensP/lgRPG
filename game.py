@@ -122,6 +122,9 @@ async def run(ctx, client):
     roles_list = []
     joueurs = channel.members
     joueurs.remove(ctx.user)
+    for j in joueurs:
+        if j.bot:
+            joueurs.remove(j)
     if len(joueurs) == 0:
         await ctx.response.send_message("Vous devez avoir des joueurs pour jouer")
         return
