@@ -45,6 +45,8 @@ class LGBot(discord.Client):
         # Prints in the console that the bot is ready
         print(f'{self.user} is now online and ready!')
 
+        await routine.init_routine(self)
+
     # Event when the bot receives a message
     async def on_message(self, message):
         # If the message is from a bot, ignore
@@ -64,13 +66,6 @@ class LGBot(discord.Client):
     async def on_typing(self, channel, user, when: datetime.datetime):
         if when.month == 4 and when.day == 1:
             await channel.send(f"{user.mention} tape plus vite ton message")
-
-    dix_heure = datetime.time(hour=12, minute=0, tzinfo=datetime.timezone.utc)
-
-    @tasks.loop(time=dix_heure)
-    async def my_task(self):
-        await routine.get_tournois(self)
-        print("update_done")
 
 
 # Function to run the bot

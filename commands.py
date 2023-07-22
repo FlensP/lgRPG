@@ -3,6 +3,7 @@ import game
 import discord
 import idea
 import autorisation
+import routine
 from avis import avis
 
 
@@ -49,3 +50,9 @@ def commands_list(client, tree):
     @tree.context_menu(name="Hello")
     async def hello(interaction: discord.Interaction, message: discord.Message):
         await interaction.response.send_message(f"Hey! {interaction.user.mention}")
+
+    @tree.command(name="forcetournoi", description="Forcer actualisation des tournois")
+    async def force_tournoi(interaction: discord.Interaction):
+        if interaction.user.id == 309331967382519819:
+            await routine.get_tournois(client, forced=True)
+
