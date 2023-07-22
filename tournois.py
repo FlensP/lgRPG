@@ -14,8 +14,7 @@ it = []
 
 
 async def send_message(client):
-    flens = client.get_user(309331967382519819)
-    chan = await flens.create_dm()
+    chan = client.get_channel(1132311114135371827)
     emb = discord.Embed(title=f"Tournois VGC FR", colour=0x9F1E1A)
     emb.set_footer(text="LG RPG by Flens_")
     for t in fr:
