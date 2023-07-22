@@ -13,12 +13,9 @@ ch = []
 it = []
 
 
-async def send_message(client, add_tournoi):
+async def send_message(client):
     flens = client.get_user(309331967382519819)
     chan = await flens.create_dm()
-    if not add_tournoi:
-        await chan.send("Pas de nouveau tournoi aujourd'hui")
-        return
     emb = discord.Embed(title=f"Tournois VGC FR", colour=0x9F1E1A)
     emb.set_footer(text="LG RPG by Flens_")
     for t in fr:

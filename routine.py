@@ -29,7 +29,7 @@ async def get_tournois(client, forced=False):
         "https://op-core.pokemon.com/api/v2/event_locator/search/?latitude=47.12493383322305&longitude=-1.395448039079782&distance=200")
     json_data = a.json()
     part4 = json_data
-    add_tournoi = False
+    tournois.tournois = []
     for i in part1["activities"]:
         if "category" in i["metadata"]:
             if i["metadata"]["category"] == "vg_mod":
@@ -38,7 +38,6 @@ async def get_tournois(client, forced=False):
                     tournois.tournois.append(
                         [i["address"]["city"], i["address"]["postal_code"], i["address"]["country"],
                          i["address"]["location_map_link"], i["name"], i["when"]])
-                    add_tournoi = True
     for i in part2["activities"]:
         if "category" in i["metadata"]:
             if i["metadata"]["category"] == "vg_mod":
@@ -47,7 +46,6 @@ async def get_tournois(client, forced=False):
                     tournois.tournois.append(
                         [i["address"]["city"], i["address"]["postal_code"], i["address"]["country"],
                          i["address"]["location_map_link"], i["name"], i["when"]])
-                    add_tournoi = True
     for i in part3["activities"]:
         if "category" in i["metadata"]:
             if i["metadata"]["category"] == "vg_mod":
@@ -56,7 +54,6 @@ async def get_tournois(client, forced=False):
                     tournois.tournois.append(
                         [i["address"]["city"], i["address"]["postal_code"], i["address"]["country"],
                          i["address"]["location_map_link"], i["name"], i["when"]])
-                    add_tournoi = True
     for i in part4["activities"]:
         if "category" in i["metadata"]:
             if i["metadata"]["category"] == "vg_mod":
@@ -65,9 +62,8 @@ async def get_tournois(client, forced=False):
                     tournois.tournois.append(
                         [i["address"]["city"], i["address"]["postal_code"], i["address"]["country"],
                          i["address"]["location_map_link"], i["name"], i["when"]])
-                    add_tournoi = True
     await tournois.filter_tournois()
-    await tournois.send_message(client, add_tournoi or forced)
+    await tournois.send_message(client)
     if not forced:
         await init_routine(client)
 
