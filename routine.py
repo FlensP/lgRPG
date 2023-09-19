@@ -19,14 +19,15 @@ async def get_tournois(client, forced=False):
 
     tournois.tournois = []
     for i in results:
-        r = i["activities"]
-        if "category" in r["metadata"]:
-            if r["metadata"]["category"] == "vg_mod":
-                if not [r["address"]["city"], r["address"]["postal_code"], r["address"]["country"],
-                        r["address"]["location_map_link"], r["name"], r["when"]] in tournois.tournois:
-                    tournois.tournois.append(
-                        [r["address"]["city"], r["address"]["postal_code"], r["address"]["country"],
-                         r["address"]["location_map_link"], r["name"], r["when"]])
+        result = i["activities"]
+        for r in result:
+            if "category" in r["metadata"]:
+                if r["metadata"]["category"] == "vg_mod":
+                    if not [r["address"]["city"], r["address"]["postal_code"], r["address"]["country"],
+                            r["address"]["location_map_link"], r["name"], r["when"]] in tournois.tournois:
+                        tournois.tournois.append(
+                            [r["address"]["city"], r["address"]["postal_code"], r["address"]["country"],
+                             r["address"]["location_map_link"], r["name"], r["when"]])
     await tournois.filter_tournois()
     await tournois.send_message(client)
     if not forced:
