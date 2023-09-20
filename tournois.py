@@ -18,25 +18,25 @@ async def send_message(client):
     emb = discord.Embed(title=f"Tournois VGC FR", colour=0x9F1E1A)
     emb.set_footer(text="LG RPG by Flens_")
     for t in fr:
-        txt = f"nom = {t[4]}\nLocalisation : {t[3]}"
+        txt = f"nom = {t[4]}"
         emb.add_field(name=f"Tournoi à {t[0]} le {t[5].day}/{t[5].month}/{t[5].year}", value=txt, inline=False)
     await chan.send(embed=emb)
     emb = discord.Embed(title=f"Tournois VGC BE", colour=0x9F1E1A)
     emb.set_footer(text="LG RPG by Flens_")
     for t in be:
-        txt = f"nom = {t[4]}\nLocalisation : {t[3]}"
+        txt = f"nom = {t[4]}"
         emb.add_field(name=f"Tournoi à {t[0]} le {t[5].day}/{t[5].month}/{t[5].year}", value=txt, inline=False)
     await chan.send(embed=emb)
     emb = discord.Embed(title=f"Tournois VGC CH", colour=0x9F1E1A)
     emb.set_footer(text="LG RPG by Flens_")
     for t in ch:
-        txt = f"nom = {t[4]}\nLocalisation : {t[3]}"
+        txt = f"nom = {t[4]}"
         emb.add_field(name=f"Tournoi à {t[0]} le {t[5].day}/{t[5].month}/{t[5].year}", value=txt, inline=False)
     await chan.send(embed=emb)
     emb = discord.Embed(title=f"Tournois VGC LU", colour=0x9F1E1A)
     emb.set_footer(text="LG RPG by Flens_")
     for t in lu:
-        txt = f"nom = {t[4]}\nLocalisation : {t[3]}"
+        txt = f"nom = {t[4]}"
         emb.add_field(name=f"Tournoi à {t[0]} le {t[5].day}/{t[5].month}/{t[5].year}", value=txt, inline=False)
     await chan.send(embed=emb)
 
