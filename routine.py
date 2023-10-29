@@ -11,6 +11,8 @@ results = []
 
 
 async def get_tournois(client, forced=False):
+    global results
+    results = []
     for p in positions:
         a = requests.get(
             f"https://op-core.pokemon.com/api/v2/event_locator/search/?latitude={p[0]}&longitude={p[1]}&distance=200")
