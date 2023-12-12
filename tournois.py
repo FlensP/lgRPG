@@ -11,6 +11,9 @@ lu = []
 nl = []
 ch = []
 it = []
+majors = {'Régional de Liverpool': datetime.date(2024, 1, 27), 'Régional de Dortmund': datetime.date(2024, 2, 10),
+          "Spécial d'Utrecht": datetime.date(2024, 3, 2), 'EUIC à Londres': datetime.date(2024, 4, 5),
+          'Régional de Stockholm': datetime.date(2024, 5, 11)}
 
 
 async def send_message(client):
@@ -38,6 +41,13 @@ async def send_message(client):
     for t in lu:
         txt = f"nom = {t[4]}"
         emb.add_field(name=f"Tournoi à {t[0]} le {t[5].day}/{t[5].month}/{t[5].year}", value=txt, inline=False)
+    await chan.send(embed=emb)
+    emb = discord.Embed(title=f"Tournois VGC LU", colour=0x9F1E1A)
+    emb.set_footer(text="LG RPG by Flens_")
+    today = datetime.date.today()
+    for tour in majors.keys():
+        if majors[tour] <= today:
+            emb.add_field(name=f"{tour}", value=f"Dans {(majors[tour] - today).days} jours", inline=False)
     await chan.send(embed=emb)
 
 
@@ -117,4 +127,3 @@ async def filter_tournois():
     gb.sort(key=lambda x: x[5])
     nl.sort(key=lambda x: x[5])
     it.sort(key=lambda x: x[5])
-
