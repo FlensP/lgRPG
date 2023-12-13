@@ -42,11 +42,11 @@ async def send_message(client):
         txt = f"nom = {t[4]}"
         emb.add_field(name=f"Tournoi à {t[0]} le {t[5].day}/{t[5].month}/{t[5].year}", value=txt, inline=False)
     await chan.send(embed=emb)
-    emb = discord.Embed(title=f"Tournois VGC LU", colour=0x9F1E1A)
+    emb = discord.Embed(title=f"Tournois Majeurs", colour=0x9F1E1A)
     emb.set_footer(text="LG RPG by Flens_")
     today = datetime.date.today()
     for tour in majors.keys():
-        if majors[tour] <= today:
+        if (majors[tour] - today).days < 0:
             emb.add_field(name=f"{tour}", value=f"Dans {(majors[tour] - today).days} jours", inline=False)
     await chan.send(embed=emb)
 
