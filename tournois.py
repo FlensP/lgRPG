@@ -46,8 +46,7 @@ async def send_message(client):
     emb.set_footer(text="LG RPG by Flens_")
     today = datetime.date.today()
     for tour in majors.keys():
-        if (majors[tour] - today).days < 0:
-            emb.add_field(name=f"{tour}", value=f"Dans {(majors[tour] - today).days} jours", inline=False)
+        emb.add_field(name=f"{tour}", value=f"Dans {(majors[tour] - today).days} jours", inline=False)
     await chan.send(embed=emb)
 
 

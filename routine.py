@@ -3,6 +3,7 @@ import datetime
 
 import requests
 
+import pokequizz
 import tournois
 
 positions = [[49.2869081268061, 3.848719678847761], [45.7812786064092, 6.802280022386639],
@@ -45,4 +46,5 @@ async def init_routine(client):
         date = datetime.datetime(now.year, now.month, now.day, hour=8)
     to_wait = date.timestamp() - datetime.datetime.now().timestamp()  # Time to wait
     await asyncio.sleep(to_wait)
+    await pokequizz.init_poke()
     await get_tournois(client)

@@ -5,6 +5,7 @@ import idea
 import autorisation
 import routine
 from avis import avis
+import pokequizz
 
 
 def commands_list(client, tree):
@@ -56,3 +57,6 @@ def commands_list(client, tree):
         if interaction.user.id == 309331967382519819:
             await routine.get_tournois(client, forced=True)
 
+    @tree.command(name="pokequizz", description="Devine le pokémon du jour")
+    async def pokequizzz(interaction: discord.Interaction):
+        await pokequizz.play(interaction, client)
