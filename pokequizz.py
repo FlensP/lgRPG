@@ -4,6 +4,7 @@ from datetime import date
 
 import discord
 import numpy as np
+import pokebase as pb
 import requests
 
 list_poke = []
@@ -23,12 +24,21 @@ habitat = {
     "rough-terrain": "milieux hostiles", "sea": "mers", "urban": "urbains", "waters-edge": "marécages"}
 shape = {
     "ball": "Balle", "squiggle": "Sinueux", "fish": "Poisson", "arms": "Bras", "blob": "Goutte", "upright": "Droit",
-    "legs": "Jambes", "quadruped": "Quadrupède", "wings": "Ailes", "tentacles": "Tentacules", "heads": "Heads",
+    "legs": "Jambes", "quadruped": "Quadrupède", "wings": "Ailes", "tentacles": "Tentacules", "heads": "Têtes",
     "humanoid": "Humanoïde", "bug-wings": "Ailes d'insecte", "armor": "Armure"}
 types = {
     "normal": "Normal", "fighting": "Combat", "flying": "Vol", "poison": "Poison", "ground": "Sol", "rock": "Roche",
     "bug": "Insecte", "ghost": "Spectre", "steel": "Acier", "fire": "Feu", "water": "Eau", "grass": "Plante",
     "electric": "Électrik", "psychic": "Psy", "ice": "Glace", "dragon": "Dragon", "dark": "Ténèbres", "fairy": "Fée"}
+shape_emo = {
+    "Balle": "<:Balle:1189954695792435220>", "Sinueux": "<:Sinueux:1189954734145142914>",
+    "Poisson": "<:Poisson:1189954754290405507>", "Bras": "<:Bras:1189954691837202462>",
+    "Goutte": "<:Goutte:1189954690465660949>", "Droit": "<:Droit:1189954689245130792>",
+    "Jambes": "<:Jambes:1189954686984392704>", "Quadrupède": "<:Quadrupde:1189954685407338598>",
+    "Ailes": "<:Ailes:1189954684639785090>", "Tentacules": "<:Tentacules:1189954682366476368>",
+    "Têtes": "<:Ttes:1189954679346573462>", "Humanoïde": "<:Humanode:1189954677941469254>",
+    "Ailes d'insecte": "<:Ailesdinsecte:1189954676356034632>", "Armure": "<:Armure:1189954674044977222>"
+}
 
 
 def init_file():
@@ -104,11 +114,16 @@ def init_poke():
         moves.append(json_data["moves"][i]["move"]["name"])
         i += 1
     random.shuffle(moves)
+    i = 0
+    while i < len(moves) and i < 15:
+        print(moves[i])
+        moves[i] = pb.move(moves[i]).names[3].name
+        i += 1
     pokemon_data["moves"] = moves
     abilities = []
     i = 0
     while i < len(json_data["abilities"]):
-        abilities.append(json_data["abilities"][i]["ability"]["name"])
+        abilities.append(pb.ability(json_data["abilities"][i]["ability"]["name"]).names[3].name)
         i += 1
     random.shuffle(abilities)
     while len(abilities) < 3:
@@ -160,7 +175,7 @@ class SelectMenu(discord.ui.Select):
                 players[interaction.user.id]["points"] += 150
             case "attaque":
                 players[interaction.user.id]["hints"]["atk"] += 1
-                players[interaction.user.id]["points"] += 5
+                players[interaction.user.id]["points"] += 10
             case "taux de capture":
                 players[interaction.user.id]["hints"]["capt"] += 1
                 players[interaction.user.id]["points"] += 5
@@ -220,7 +235,7 @@ async def edit_embed(interaction):
     if hints["color"] > 0:
         txt += f"La couleur du pokémon est : {pokemon_data['color']}\n"
     if hints["shape"] > 0:
-        txt += f"La forme du pokémon est : {pokemon_data['shape']}\n"
+        txt += f"La forme du pokémon est : {pokemon_data['shape']} {shape_emo[pokemon_data['shape']]}\n"
     if hints["egg"] > 0:
         txt += f"Le groupe oeuf du pokémon est : {pokemon_data['egg_group']}\n"
     if hints["can_evo"] > 0:
@@ -260,17 +275,21 @@ async def play(ctx, client):
     global players
     if ctx.user.id not in players:
         players[ctx.user.id] = {"points": 0,
-                                "hints": {"type": 0, "gen": 0, "w/h": 0, "tal": 0, "atk": 0, "capt": 0, "color": 0, "shape": 0,
+                                "hints": {"type": 0, "gen": 0, "w/h": 0, "tal": 0, "atk": 0, "capt": 0, "color": 0,
+                                          "shape": 0,
                                           "egg": 0, "can_evo": 0, "is_evo": 0, "stat": 0}, "find": False,
                                 "message": None}
     if players[ctx.user.id]["find"]:
         await ctx.response.send_message(
-            f"Vous avez déjà trouvé le pokémon du jour {pokemon_data['name']} avec {players[ctx.user.id]['points']}")
+            f"Vous avez déjà trouvé le pokémon du jour {pokemon_data['name']} avec un score de : {players[ctx.user.id]['points']}")
         return
     if not ctx.channel.type == discord.ChannelType.private:
         await ctx.response.send_message(
             f"Vous devez vous rendre en message privé pour jouer")
         return
+    await ctx.response.send_message(
+        "L'objectif est de trouver le pokémon du jour avec le plus petit score possible. Pour faire une tentative, "
+        "envoyez le nom en français du pokémon dans ce channel. Amusez vous bien !")
     emb = discord.Embed(title=f"Pokémon du jour", colour=0x9F1E1A)
     emb.set_footer(text="LG Bot by Flens_")
     view = QuizzView(timeout=120, user=ctx.user)
