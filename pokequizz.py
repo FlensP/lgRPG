@@ -160,15 +160,15 @@ class SelectMenu(discord.ui.Select):
     def __init__(self, titre):
         options = [discord.SelectOption(label="type", description="Type du pokémon : 200"),
                    discord.SelectOption(label="génération", description="Génération du pokémon : 100"),
-                   discord.SelectOption(label="poids/taille", description="Poids et taille du pokémon : 10"),
-                   discord.SelectOption(label="talent", description="Talent du pokémon : 150"),
+                   discord.SelectOption(label="poids/taille", description="Poids et taille du pokémon : 20"),
+                   discord.SelectOption(label="talent", description="Talent du pokémon : 100"),
                    discord.SelectOption(label="attaque", description="Attaque du pokémon : 10"),
                    discord.SelectOption(label="taux de capture", description="Taux de capture du pokémon : 5"),
-                   discord.SelectOption(label="info dex", description="Couleur ou forme du pokémon : 20"),
-                   discord.SelectOption(label="groupe oeuf", description="Groupe oeuf du pokémon : 5"),
+                   discord.SelectOption(label="info dex", description="Couleur ou forme du pokémon : 40"),
+                   discord.SelectOption(label="groupe oeuf", description="Groupe oeuf du pokémon : 15"),
                    discord.SelectOption(label="peut évoluer", description="Si le pokémon peut évoluer : 50"),
                    discord.SelectOption(label="a évolué", description="Si le pokémon a déjà évolué : 70"),
-                   discord.SelectOption(label="stat", description="Une stat du pokémon : 40")]
+                   discord.SelectOption(label="stat", description="Une stat du pokémon : 15")]
         super().__init__(placeholder=titre, min_values=1, max_values=1, options=options)
 
     async def callback(self, interaction: discord.Interaction):
@@ -181,10 +181,10 @@ class SelectMenu(discord.ui.Select):
                 players[interaction.user.id]["points"] += 100
             case "poids/taille":
                 players[interaction.user.id]["hints"]["w/h"] += 1
-                players[interaction.user.id]["points"] += 10
+                players[interaction.user.id]["points"] += 20
             case "talent":
                 players[interaction.user.id]["hints"]["tal"] += 1
-                players[interaction.user.id]["points"] += 150
+                players[interaction.user.id]["points"] += 100
             case "attaque":
                 players[interaction.user.id]["hints"]["atk"] += 1
                 players[interaction.user.id]["points"] += 10
@@ -192,7 +192,7 @@ class SelectMenu(discord.ui.Select):
                 players[interaction.user.id]["hints"]["capt"] += 1
                 players[interaction.user.id]["points"] += 5
             case "info dex":
-                players[interaction.user.id]["points"] += 20
+                players[interaction.user.id]["points"] += 40
                 if players[interaction.user.id]["hints"]["color"] > 0:
                     players[interaction.user.id]["hints"]["shape"] += 1
                 elif players[interaction.user.id]["hints"]["shape"] > 0:
@@ -203,7 +203,7 @@ class SelectMenu(discord.ui.Select):
                     players[interaction.user.id]["hints"]["color"] += 1
             case "groupe oeuf":
                 players[interaction.user.id]["hints"]["egg"] += 1
-                players[interaction.user.id]["points"] += 5
+                players[interaction.user.id]["points"] += 15
             case "peut évoluer":
                 players[interaction.user.id]["hints"]["can_evo"] += 1
                 players[interaction.user.id]["points"] += 50
@@ -212,7 +212,7 @@ class SelectMenu(discord.ui.Select):
                 players[interaction.user.id]["points"] += 70
             case "stat":
                 players[interaction.user.id]["hints"]["stat"] += 1
-                players[interaction.user.id]["points"] += 40
+                players[interaction.user.id]["points"] += 15
         await edit_embed(interaction)
         await interaction.response.defer()
 
@@ -304,7 +304,7 @@ async def play(ctx, client):
         "envoyez le nom en français du pokémon dans ce channel. Amusez vous bien !")
     emb = discord.Embed(title=f"Pokémon du jour", colour=0x9F1E1A)
     emb.set_footer(text="LG Bot by Flens_")
-    view = QuizzView(timeout=120, user=ctx.user)
+    view = QuizzView(timeout=1200, user=ctx.user)
     chan = await ctx.user.create_dm()
     players[ctx.user.id]["message"] = await chan.send(embed=emb, view=view)
     view.message = players[ctx.user.id]["message"]
