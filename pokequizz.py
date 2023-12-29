@@ -1,4 +1,5 @@
 import os.path
+import pickle
 import random
 from datetime import date
 
@@ -39,6 +40,21 @@ shape_emo = {
     "Têtes": "<:Ttes:1189954679346573462>", "Humanoïde": "<:Humanode:1189954677941469254>",
     "Ailes d'insecte": "<:Ailesdinsecte:1189954676356034632>", "Armure": "<:Armure:1189954674044977222>"
 }
+class Data:
+    def __init__(self):
+        self.list_poke = list_poke
+
+
+def save():
+    with open("list_poke", "wb") as file:
+        pickle.Pickler(file).dump(Data())
+
+
+def load():
+    global list_poke
+    with open("list_poke", "rb") as file:
+        data = pickle.Unpickler(file).load()
+        list_poke = data.list_poke
 
 
 def init_file():
@@ -48,13 +64,9 @@ def init_file():
         list_poke = list(range(1, 905))
         random.shuffle(list_poke)
         list_poke.append(date.today())
-        file = open("list_poke", "wb")
-        np.save(file, list_poke)
-        file.close()
+        save()
     else:
-        file = open("list_poke", "rb")
-        list_poke = np.load(file)
-        file.close()
+        load()
 
 
 def init_poke():
