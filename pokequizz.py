@@ -75,7 +75,6 @@ def init_poke():
     players = {}
     i = int((date.today() - list_poke[904]).days)
     i = list_poke[i]
-    print(f"Le pokémon du jour est le numéro {i}")
     a = requests.get(f"https://pokeapi.co/api/v2/pokemon-species/{i}")
     json_data_sp = a.json()
     a = requests.get(f"https://pokeapi.co/api/v2/pokemon/{i}")
@@ -129,7 +128,6 @@ def init_poke():
     random.shuffle(moves)
     i = 0
     while i < len(moves) and i < 15:
-        print(moves[i])
         moves[i] = pb.move(moves[i]).names[3].name
         i += 1
     pokemon_data["moves"] = moves
@@ -154,7 +152,6 @@ def init_poke():
             if json_evo["chain"]["evolves_to"][i]["species"]["name"].lower() == en_name.lower():
                 pokemon_data["can_evolve"] = len(json_evo["chain"]["evolves_to"][i]["evolves_to"]) > 0
             i += 1
-    print(pokemon_data)
 
 
 class SelectMenu(discord.ui.Select):
