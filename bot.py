@@ -57,11 +57,6 @@ class LGBot(discord.Client):
         username = str(message.author)
         user_msg = str(message.content)
         channel = message.channel
-        if isinstance(channel, discord.DMChannel):
-            if message.author.id in pokequizz.players:
-                if user_msg.lower() == pokequizz.pokemon_data["name"].lower():
-                    await channel.send("Vous avez trouvé ! GG")
-                    pokequizz.players[message.author.id]["find"] = True
         # Call responses with message of the user and responds if necessary
         response = await responses(self, user_msg, channel)
         if not response == '':

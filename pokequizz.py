@@ -4,7 +4,6 @@ import random
 from datetime import date
 
 import discord
-import numpy as np
 import pokebase as pb
 import requests
 
@@ -40,6 +39,8 @@ shape_emo = {
     "Têtes": "<:Ttes:1189954679346573462>", "Humanoïde": "<:Humanode:1189954677941469254>",
     "Ailes d'insecte": "<:Ailesdinsecte:1189954676356034632>", "Armure": "<:Armure:1189954674044977222>"
 }
+
+
 class Data:
     def __init__(self):
         self.list_poke = list_poke
@@ -168,7 +169,8 @@ class SelectMenu(discord.ui.Select):
                    discord.SelectOption(label="groupe oeuf", description="Groupe oeuf du pokémon : 15"),
                    discord.SelectOption(label="peut évoluer", description="Si le pokémon peut évoluer : 50"),
                    discord.SelectOption(label="a évolué", description="Si le pokémon a déjà évolué : 70"),
-                   discord.SelectOption(label="stat", description="Une stat du pokémon : 15")]
+                   discord.SelectOption(label="stat", description="Une stat du pokémon : 15"),
+                   discord.SelectOption(label="allstat", description="Toutes les stats du pokémon : 50")]
         super().__init__(placeholder=titre, min_values=1, max_values=1, options=options)
 
     async def callback(self, interaction: discord.Interaction):
@@ -213,6 +215,9 @@ class SelectMenu(discord.ui.Select):
             case "stat":
                 players[interaction.user.id]["hints"]["stat"] += 1
                 players[interaction.user.id]["points"] += 15
+            case "allstat":
+                players[interaction.user.id]["hints"]["stat"] += 6
+                players[interaction.user.id]["points"] += 50
         await edit_embed(interaction)
         await interaction.response.defer()
 
@@ -301,7 +306,8 @@ async def play(ctx, client):
         return
     await ctx.response.send_message(
         "L'objectif est de trouver le pokémon du jour avec le plus petit score possible. Pour faire une tentative, "
-        "envoyez le nom en français du pokémon dans ce channel. Amusez vous bien !")
+        "utilisez la commande /guess avec le nom en français du pokémon dans ce channel (chaque essai donnera 5 "
+        "point s'il est faux). Amusez vous bien !")
     emb = discord.Embed(title=f"Pokémon du jour", colour=0x9F1E1A)
     emb.set_footer(text="LG Bot by Flens_")
     view = QuizzView(timeout=1200, user=ctx.user)
@@ -311,3 +317,27 @@ async def play(ctx, client):
     await edit_embed(ctx)
     await view.wait()
     await view.disable_all_items()
+
+
+async def guess(ctx, client, name):
+    global players, pokemon_data
+    if ctx.user.id not in players:
+        await ctx.response.send_message(
+            f"Vous n'avez pas encore commencé le pokequizz du jour, faites /pokequizz pour débuter !")
+        return
+    if players[ctx.user.id]["find"]:
+        await ctx.response.send_message(
+            f"Vous avez déjà trouvé le pokémon du jour {pokemon_data['name']} avec un score de : {players[ctx.user.id]['points']}")
+        return
+    if not ctx.channel.type == discord.ChannelType.private:
+        await ctx.response.send_message(
+            f"Vous devez vous rendre en message privé pour jouer")
+        return
+    if name.lower() == pokemon_data["name"].lower():
+        await ctx.response.send_message(
+            f"Vous avez trouvé ! GG à vous")
+        players[ctx.user.id]['find'] = True
+        return
+    else:
+        await ctx.response.send_message(f"Mauvaise réponse (faites attention à l'orthographe !) + 5 points")
+        players[ctx.user.id]['points'] += 5

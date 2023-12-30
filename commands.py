@@ -1,11 +1,13 @@
 import random
-import game
+
 import discord
-import idea
+
 import autorisation
+import game
+import idea
+import pokequizz
 import routine
 from avis import avis
-import pokequizz
 
 
 def commands_list(client, tree):
@@ -43,7 +45,6 @@ def commands_list(client, tree):
     async def avis2(interaction: discord.Interaction, question: str):
         await interaction.response.send_message(embed=await avis(question))
 
-
     @tree.command(name="proposition", description="Fait une proposition d'amélioration pour le bot")
     async def proposition(interaction: discord.Interaction, proposition: str):
         await idea.run(interaction, proposition, client)
@@ -60,3 +61,7 @@ def commands_list(client, tree):
     @tree.command(name="pokequizz", description="Devine le pokémon du jour")
     async def pokequizzz(interaction: discord.Interaction):
         await pokequizz.play(interaction, client)
+
+    @tree.command(name="guess", description="Fait une proposition pour le pokémon du jour")
+    async def poke_guess(interaction: discord.Interaction, guess: str):
+        await pokequizz.guess(interaction, client, guess)
