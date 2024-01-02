@@ -46,5 +46,5 @@ async def init_routine(client):
         date = datetime.datetime(now.year, now.month, now.day, hour=8)
     to_wait = date.timestamp() - datetime.datetime.now().timestamp()  # Time to wait
     await asyncio.sleep(to_wait)
-    await pokequizz.init_poke()
+    pokequizz.init_poke()
     await get_tournois(client)
